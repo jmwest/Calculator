@@ -7,31 +7,25 @@
 //
 
 #import "CalculatorViewController.h"
+#import "CalculatorBrain.h"
 
 @interface CalculatorViewController ()
+@property CalculatorBrain *calculatorBrainModel;
 
 @end
 
 @implementation CalculatorViewController
 
 @synthesize displayOperationParametersLabel = _displayOperationParametersLabel;
-
-NSInteger firstOperand = 0;
-NSInteger secondOperand = 0;
-NSInteger operandPlaceholderInt;
-NSInteger isFirstOperand = 1;
-NSInteger whatOperationToPerform = 3;
-NSInteger resultOfOperation;
-NSInteger enterWasPressed = 0;
-NSString *displayOperationParametersLabelString;
-NSString *initialZeroForTheDisplayString = @"0";
-
+@synthesize calculatorBrainModel = _calculatorBrainModel;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    [self.displayOperationParametersLabel setText:initialZeroForTheDisplayString];
+    self.calculatorBrainModel = [[CalculatorBrain alloc] init];
+    
+    [self.displayOperationParametersLabel setText:self.calculatorBrainModel.initialZeroForTheDisplayString];
 }
 
 - (void)didReceiveMemoryWarning
@@ -41,112 +35,84 @@ NSString *initialZeroForTheDisplayString = @"0";
 
 - (void) displayResultOfOperation
 {
-    NSString *resultOfOperationString = [NSString stringWithFormat:@"%d", resultOfOperation];
+    NSString *resultOfOperationString = [NSString stringWithFormat:@"%d", self.calculatorBrainModel.resultOfOperation];
     [self.displayOperationParametersLabel setText:resultOfOperationString];
 }
 
 - (void) displayFirstOperand
 {
-    NSString *firstOperandString = [NSString stringWithFormat:@"%d", firstOperand];
+    NSString *firstOperandString = [NSString stringWithFormat:@"%d", self.calculatorBrainModel.firstOperand];
     [self.displayOperationParametersLabel setText:firstOperandString];
     
-    displayOperationParametersLabelString = firstOperandString;
+    self.calculatorBrainModel.displayOperationParametersLabelString = firstOperandString;
 }
 
 - (void) displaySecondOperand
 {
-    NSString *secondOperandString = [NSString stringWithFormat:@"%d", secondOperand];
+    NSString *secondOperandString = [NSString stringWithFormat:@"%d", self.calculatorBrainModel.secondOperand];
     [self.displayOperationParametersLabel setText:secondOperandString];
 }
 
 - (void) displayOperationSymbol
 {
    
-    if (whatOperationToPerform == 1) {
+    if (self.calculatorBrainModel.whatOperationToPerform == 1) {
         NSString *multiplyString = @"*";
         [self.displayOperationParametersLabel setText:multiplyString];
     }
     
-    if (whatOperationToPerform == 2) {
+    if (self.calculatorBrainModel.whatOperationToPerform == 2) {
         NSString *divideString = @"/";
         [self.displayOperationParametersLabel setText:divideString];
     }
     
-    if (whatOperationToPerform == 3) {
+    if (self.calculatorBrainModel.whatOperationToPerform == 3) {
         NSString *additionString = @"+";
         [self.displayOperationParametersLabel setText:additionString];
     }
 
-    if (whatOperationToPerform == 4) {
+    if (self.calculatorBrainModel.whatOperationToPerform == 4) {
         NSString *subtractionString = @"-";
         [self.displayOperationParametersLabel setText:subtractionString];
     }
 }
 
-- (void) resetDisplayText
+- (void)resetDisplayText
 {
     [self.displayOperationParametersLabel setText:@"0"];
 
 }
 
 - (IBAction)clearButtonPressed:(UIButton *)sender {
-    firstOperand = 0;
-    secondOperand = 0;
-    isFirstOperand = 1;
+    
+    [self.calculatorBrainModel clearValues];
     [self resetDisplayText];
 }
 
 - (IBAction)enterButtonPressed:(UIButton *)sender {
-    NSLog(@"%d",whatOperationToPerform);
-    NSLog(@"%d",firstOperand);
-    NSLog(@"%d",secondOperand);
     
-    if (enterWasPressed == 1) {
-        firstOperand = resultOfOperation;
-    }
+    [self.calculatorBrainModel calculateResult];
     
-    enterWasPressed = 1;
-    
-    if (whatOperationToPerform == 1) {
-        resultOfOperation = firstOperand * secondOperand;
-    }
-    else if (whatOperationToPerform == 2) {
-        resultOfOperation = firstOperand / secondOperand;
-    }
-    else if (whatOperationToPerform == 3) {
-        resultOfOperation = firstOperand + secondOperand;
-    }
-    else if (whatOperationToPerform == 4) {
-        resultOfOperation = firstOperand - secondOperand;
-    }
-    
-    
-    
-    NSLog(@"%d",resultOfOperation);
     [self displayResultOfOperation];
 }
 
 - (IBAction)operandButtonPressed:(UIButton *)sender {
 
-    NSString *operandButtonPressedString;
-    operandButtonPressedString = sender.currentTitle;
-
-    if (enterWasPressed == 1) {
-        firstOperand = 0;
-        secondOperand = 0;
-        enterWasPressed = 0;
-    }
+    self.calculatorBrainModel.operandButtonPressedString = sender.currentTitle;
     
-    if ( (isFirstOperand == 1) && (firstOperand < 99999) ) {
-        operandPlaceholderInt = firstOperand;
-        firstOperand = ( (operandPlaceholderInt * 10) + [operandButtonPressedString integerValue] );
-
+    [self.calculatorBrainModel newOperation];
+    
+    if ( (self.calculatorBrainModel.isFirstOperand == 1) && (self.calculatorBrainModel.firstOperand < 99999) ) {
+        
+        [self.calculatorBrainModel increaseFirstOperand];
+        
         [self displayFirstOperand];
     }
     
-    else if ( (isFirstOperand == 0) && (secondOperand < 99999) ){
-        operandPlaceholderInt = secondOperand;
-        secondOperand = ( (operandPlaceholderInt * 10) + [operandButtonPressedString integerValue] );
+    else if ( (self.calculatorBrainModel.isFirstOperand == 0) && (self.calculatorBrainModel.secondOperand < 99999) ){
+        
+        [self.calculatorBrainModel increaseSecondOperand];
+        
         [self displaySecondOperand];
         
     }
@@ -154,34 +120,28 @@ NSString *initialZeroForTheDisplayString = @"0";
 
 - (IBAction)operationButtonPressed:(UIButton *)sender {
     
-    isFirstOperand = 0;
-   
-    if (enterWasPressed ==1) {
-        enterWasPressed = 0;
-        isFirstOperand = 0;
-        secondOperand = 0;
-        firstOperand = resultOfOperation;
-    }
+    self.calculatorBrainModel.currentOperationString = sender.currentTitle;
     
-    NSString *currentOperationString = sender.currentTitle;
-
-    if ([currentOperationString isEqualToString:@"*"]) {
-        whatOperationToPerform = 1;
+    if ([self.calculatorBrainModel.currentOperationString isEqualToString:@"*"]) {
+        [self.calculatorBrainModel setTheOperation];
         [self displayOperationSymbol];
 
     }
-    else if ([currentOperationString isEqualToString:@"/"]) {
-        whatOperationToPerform = 2;
+    else if ([self.calculatorBrainModel.currentOperationString isEqualToString:@"/"])
+    {
+        [self.calculatorBrainModel setTheOperation];
         [self displayOperationSymbol];
 
     }
-    else if ([currentOperationString isEqualToString:@"+" ]) {
-        whatOperationToPerform = 3;
+    else if ([self.calculatorBrainModel.currentOperationString isEqualToString:@"+" ])
+    {
+        [self.calculatorBrainModel setTheOperation];
         [self displayOperationSymbol];
 
     }
-    else if ([currentOperationString isEqualToString:@"--"]) {
-        whatOperationToPerform = 4;
+    else if ([self.calculatorBrainModel.currentOperationString isEqualToString:@"--"])
+    {
+        [self.calculatorBrainModel setTheOperation];
         [self displayOperationSymbol];
 
     }

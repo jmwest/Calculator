@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		27C9BAE1174666B7005E87E8 /* CalculatorBrain.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C9BAE0174666B7005E87E8 /* CalculatorBrain.m */; };
 		27FF22EB17452819003C67AE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27FF22EA17452819003C67AE /* UIKit.framework */; };
 		27FF22ED17452819003C67AE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27FF22EC17452819003C67AE /* Foundation.framework */; };
 		27FF22EF17452819003C67AE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27FF22EE17452819003C67AE /* CoreGraphics.framework */; };
@@ -21,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		27C9BADF174666B7005E87E8 /* CalculatorBrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculatorBrain.h; sourceTree = "<group>"; };
+		27C9BAE0174666B7005E87E8 /* CalculatorBrain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalculatorBrain.m; sourceTree = "<group>"; };
 		27FF22E617452819003C67AE /* Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27FF22EA17452819003C67AE /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		27FF22EC17452819003C67AE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -89,6 +92,8 @@
 				27FF230517452819003C67AE /* CalculatorViewController.h */,
 				27FF230617452819003C67AE /* CalculatorViewController.m */,
 				27FF22F117452819003C67AE /* Supporting Files */,
+				27C9BADF174666B7005E87E8 /* CalculatorBrain.h */,
+				27C9BAE0174666B7005E87E8 /* CalculatorBrain.m */,
 			);
 			path = Calculator;
 			sourceTree = "<group>";
@@ -177,6 +182,7 @@
 				27FF22F717452819003C67AE /* main.m in Sources */,
 				27FF22FB17452819003C67AE /* CalculatorAppDelegate.m in Sources */,
 				27FF230717452819003C67AE /* CalculatorViewController.m in Sources */,
+				27C9BAE1174666B7005E87E8 /* CalculatorBrain.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
