@@ -13,6 +13,12 @@
 - (IBAction)enterButtonPressed:(UIButton *)sender;
 - (IBAction)operandButtonPressed:(UIButton *)sender;
 - (IBAction)operationButtonPressed:(UIButton *)sender;
-@property (weak, nonatomic) IBOutlet UILabel *displayOperationParametersBox;
+@property (weak, nonatomic) IBOutlet UILabel *displayOperationParametersLabel;
+
+- (void) displayResultOfOperation;
+- (void) displayFirstOperand;
+- (void) displaySecondOperand;
+- (void) displayOperationSymbol;
+- (void) resetDisplayText;
 
 @end

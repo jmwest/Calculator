@@ -14,104 +14,177 @@
 
 @implementation CalculatorViewController
 
-@synthesize displayOperationParametersBox;
+@synthesize displayOperationParametersLabel = _displayOperationParametersLabel;
 
-NSInteger firstOperand;
-NSInteger secondOperand;
+NSInteger firstOperand = 0;
+NSInteger secondOperand = 0;
 NSInteger operandPlaceholderInt;
-NSInteger isFirstOperand = 0;
+NSInteger isFirstOperand = 1;
+NSInteger whatOperationToPerform = 3;
+NSInteger resultOfOperation;
+NSInteger enterWasPressed = 0;
+NSString *displayOperationParametersLabelString;
+NSString *initialZeroForTheDisplayString = @"0";
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    
+    [self.displayOperationParametersLabel setText:initialZeroForTheDisplayString];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+- (void) displayResultOfOperation
+{
+    NSString *resultOfOperationString = [NSString stringWithFormat:@"%d", resultOfOperation];
+    [self.displayOperationParametersLabel setText:resultOfOperationString];
+}
+
+- (void) displayFirstOperand
+{
+    NSString *firstOperandString = [NSString stringWithFormat:@"%d", firstOperand];
+    [self.displayOperationParametersLabel setText:firstOperandString];
+    
+    displayOperationParametersLabelString = firstOperandString;
+}
+
+- (void) displaySecondOperand
+{
+    NSString *secondOperandString = [NSString stringWithFormat:@"%d", secondOperand];
+    [self.displayOperationParametersLabel setText:secondOperandString];
+}
+
+- (void) displayOperationSymbol
+{
+   
+    if (whatOperationToPerform == 1) {
+        NSString *multiplyString = @"*";
+        [self.displayOperationParametersLabel setText:multiplyString];
+    }
+    
+    if (whatOperationToPerform == 2) {
+        NSString *divideString = @"/";
+        [self.displayOperationParametersLabel setText:divideString];
+    }
+    
+    if (whatOperationToPerform == 3) {
+        NSString *additionString = @"+";
+        [self.displayOperationParametersLabel setText:additionString];
+    }
+
+    if (whatOperationToPerform == 4) {
+        NSString *subtractionString = @"-";
+        [self.displayOperationParametersLabel setText:subtractionString];
+    }
+}
+
+- (void) resetDisplayText
+{
+    [self.displayOperationParametersLabel setText:@"0"];
+
 }
 
 - (IBAction)clearButtonPressed:(UIButton *)sender {
+    firstOperand = 0;
+    secondOperand = 0;
+    isFirstOperand = 1;
+    [self resetDisplayText];
 }
 
 - (IBAction)enterButtonPressed:(UIButton *)sender {
+    NSLog(@"%d",whatOperationToPerform);
+    NSLog(@"%d",firstOperand);
+    NSLog(@"%d",secondOperand);
+    
+    if (enterWasPressed == 1) {
+        firstOperand = resultOfOperation;
+    }
+    
+    enterWasPressed = 1;
+    
+    if (whatOperationToPerform == 1) {
+        resultOfOperation = firstOperand * secondOperand;
+    }
+    else if (whatOperationToPerform == 2) {
+        resultOfOperation = firstOperand / secondOperand;
+    }
+    else if (whatOperationToPerform == 3) {
+        resultOfOperation = firstOperand + secondOperand;
+    }
+    else if (whatOperationToPerform == 4) {
+        resultOfOperation = firstOperand - secondOperand;
+    }
+    
+    
+    
+    NSLog(@"%d",resultOfOperation);
+    [self displayResultOfOperation];
 }
 
 - (IBAction)operandButtonPressed:(UIButton *)sender {
+
     NSString *operandButtonPressedString;
     operandButtonPressedString = sender.currentTitle;
-    if (isFirstOperand == 0) {
-        operandPlaceholderInt = firstOperand;
-        if (operandButtonPressedString == @"0") {
-            firstOperand = (0 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"1") {
-            firstOperand = (1 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"2") {
-            firstOperand = (2 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"3") {
-            firstOperand = (3 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"4") {
-            firstOperand = (4 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"5") {
-            firstOperand = (5 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"6") {
-            firstOperand = (6 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"7") {
-            firstOperand = (7 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"8") {
-            firstOperand = (8 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"9") {
-            firstOperand = (9 + (operandPlaceholderInt * 10));
-        }
+
+    if (enterWasPressed == 1) {
+        firstOperand = 0;
+        secondOperand = 0;
+        enterWasPressed = 0;
     }
     
-    else if (isFirstOperand == 1) {
+    if ( (isFirstOperand == 1) && (firstOperand < 99999) ) {
+        operandPlaceholderInt = firstOperand;
+        firstOperand = ( (operandPlaceholderInt * 10) + [operandButtonPressedString integerValue] );
+
+        [self displayFirstOperand];
+    }
+    
+    else if ( (isFirstOperand == 0) && (secondOperand < 99999) ){
         operandPlaceholderInt = secondOperand;
-        if (operandButtonPressedString == @"0") {
-            secondOperand = (0 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"1") {
-            secondOperand = (1 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"2") {
-            secondOperand = (2 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"3") {
-            secondOperand = (3 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"4") {
-            secondOperand = (4 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"5") {
-            secondOperand = (5 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"6") {
-            secondOperand = (6 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"7") {
-            secondOperand = (7 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"8") {
-            secondOperand = (8 + (operandPlaceholderInt * 10));
-        }
-        else if (operandButtonPressedString == @"9") {
-            secondOperand = (9 + (operandPlaceholderInt * 10));
-        }
+        secondOperand = ( (operandPlaceholderInt * 10) + [operandButtonPressedString integerValue] );
+        [self displaySecondOperand];
+        
     }
 }
 
 - (IBAction)operationButtonPressed:(UIButton *)sender {
+    
+    isFirstOperand = 0;
+   
+    if (enterWasPressed ==1) {
+        enterWasPressed = 0;
+        isFirstOperand = 0;
+        secondOperand = 0;
+        firstOperand = resultOfOperation;
+    }
+    
+    NSString *currentOperationString = sender.currentTitle;
+
+    if ([currentOperationString isEqualToString:@"*"]) {
+        whatOperationToPerform = 1;
+        [self displayOperationSymbol];
+
+    }
+    else if ([currentOperationString isEqualToString:@"/"]) {
+        whatOperationToPerform = 2;
+        [self displayOperationSymbol];
+
+    }
+    else if ([currentOperationString isEqualToString:@"+" ]) {
+        whatOperationToPerform = 3;
+        [self displayOperationSymbol];
+
+    }
+    else if ([currentOperationString isEqualToString:@"--"]) {
+        whatOperationToPerform = 4;
+        [self displayOperationSymbol];
+
+    }
 }
 
 @end
